@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>悩みに寄り添い、技術で導く｜SAMPLE 矯正歯科</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,400&family=Zen+Kaku+Gothic+New:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#363D40; --ink2:#2b3033; --ink3:#1f2426;
+  --paper:#f3f2ef; --paper2:#eceae5;
+  --line:rgba(54,61,64,.16);
+  --sub:#6f7479; --white:#fbfaf8;
+  --accent:#9a7b4f; /* くすんだ真鍮：彩度低め */
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--paper);color:var(--ink);font-family:"Zen Kaku Gothic New",sans-serif;font-weight:400;overflow-x:hidden;-webkit-font-smoothing:antialiased;letter-spacing:.04em}
+::selection{background:var(--ink);color:var(--paper)}
+img{display:block;width:100%;height:100%;object-fit:cover}
+.en{font-family:"Cormorant Garamond",serif}
+
+/* ===== sample ===== */
+.sample{position:relative;overflow:hidden;background:#c9c6c0}
+.sample::before{content:"";position:absolute;inset:0;z-index:2;pointer-events:none;background:repeating-linear-gradient(-45deg,rgba(0,0,0,.05) 0 24px,rgba(255,255,255,.05) 24px 48px)}
+.sample::after{content:"SAMPLE / サンプル";position:absolute;z-index:3;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-45deg);font-family:"Cormorant Garamond",serif;font-weight:400;letter-spacing:.28em;white-space:nowrap;font-size:clamp(.9rem,2vw,1.7rem);color:rgba(54,61,64,.5);border:1.5px solid rgba(54,61,64,.4);padding:.22em 1em;border-radius:3px;text-transform:uppercase;pointer-events:none}
+.sample.s::after{font-size:clamp(.6rem,1.2vw,.9rem);padding:.18em .7em}
+.sample .fill{width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#bdbab3,#d4d1ca);color:rgba(54,61,64,.28);font-family:"Cormorant Garamond",serif;letter-spacing:.2em;font-size:.85rem}
+
+/* clip shapes（角を曲げる/切る） */
+.clip-tl{clip-path:polygon(8% 0,100% 0,100% 100%,0 100%,0 8%)}
+.clip-br{clip-path:polygon(0 0,100% 0,100% 92%,92% 100%,0 100%)}
+.clip-diag{clip-path:polygon(0 0,100% 0,100% 86%,0 100%)}
+.clip-diag-rev{clip-path:polygon(0 0,100% 14%,100% 100%,0 100%)}
+.clip-blob{border-radius:46% 54% 60% 40% / 52% 44% 56% 48%}
+
+/* ===== loader ===== */
+#load{position:fixed;inset:0;z-index:9999;background:var(--ink);color:var(--paper);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:18px}
+#load .en{font-size:clamp(1.6rem,5vw,3rem);letter-spacing:.4em;overflow:hidden;display:flex}
+#load .en span{display:inline-block;transform:translateY(110%)}
+#load .ln{width:0;height:1px;background:var(--accent);max-width:280px}
+.curtain{position:fixed;inset:0;z-index:9998;background:var(--paper);transform:scaleY(0);transform-origin:bottom}
+
+/* ===== cursor ===== */
+.cur{position:fixed;width:34px;height:34px;border:1px solid var(--ink);border-radius:50%;top:0;left:0;transform:translate(-50%,-50%);pointer-events:none;z-index:9000;transition:width .35s,height .35s,background .35s;mix-blend-mode:difference}
+@media(hover:none){.cur{display:none}}
+
+/* ===== header ===== */
+header{position:fixed;top:0;left:0;width:100%;z-index:1000;display:flex;justify-content:space-between;align-items:center;padding:24px clamp(20px,4vw,52px);transition:.5s}
+header.scrolled{background:rgba(243,242,239,.88);backdrop-filter:blur(10px);padding:15px clamp(20px,4vw,52px);border-bottom:1px solid var(--line)}
+.brand{line-height:1.2}
+.brand .n{font-family:"Cormorant Garamond",serif;font-size:1.15rem;letter-spacing:.22em}
+.brand .t{font-size:.52rem;letter-spacing:.4em;color:var(--sub);margin-top:2px}
+header.hero-mode .brand .n,header.hero-mode .brand .t{color:var(--white)}
+nav{display:flex;gap:28px;align-items:center}
+nav a{text-decoration:none;color:var(--ink);font-size:.74rem;letter-spacing:.12em;position:relative}
+header.hero-mode nav a{color:var(--white)}
+nav a:not(.tel)::after{content:"";position:absolute;left:0;bottom:-5px;width:0;height:1px;background:currentColor;transition:.4s}
+nav a:hover::after{width:100%}
+nav .tel{font-family:"Cormorant Garamond",serif;font-size:1rem;letter-spacing:.1em;border:1px solid currentColor;padding:9px 18px}
+.burger{display:none;flex-direction:column;gap:5px;cursor:pointer}
+.burger span{width:24px;height:1.5px;background:var(--ink);display:block}
+header.hero-mode .burger span{background:var(--white)}
+@media(max-width:880px){nav{display:none}.burger{display:flex}}
+
+/* ===== HERO（アシンメトリー：左下に寄せ＋右上に縦帯写真） ===== */
+#hero{position:relative;height:100vh;min-height:620px;overflow:hidden;background:var(--ink)}
+#hero .bg{position:absolute;inset:0;z-index:1}
+#hero .bg .fill{background:linear-gradient(135deg,#3a4044,#1f2426);color:rgba(255,255,255,.16)}
+#hero .veil{position:absolute;inset:0;z-index:2;background:linear-gradient(110deg,rgba(20,24,26,.6) 30%,rgba(20,24,26,.05) 75%)}
+/* 右上に飛び出す縦長サブ写真 */
+.hero-strip{position:absolute;z-index:5;top:-4%;right:6%;width:min(26vw,300px);height:62%;overflow:hidden;transform:translateY(-30px);opacity:0}
+.hero-c{position:absolute;z-index:6;left:clamp(20px,7vw,110px);bottom:clamp(60px,14vh,150px);color:var(--white)}
+.hero-c .label{font-family:"Cormorant Garamond",serif;letter-spacing:.5em;font-size:.72rem;opacity:0;text-transform:uppercase}
+.hero-c h1{font-size:clamp(2.4rem,7vw,5.6rem);font-weight:500;line-height:1.24;margin-top:20px;letter-spacing:.04em}
+.hero-c h1 .l{display:block;overflow:hidden}
+.hero-c h1 .l i{display:inline-block;transform:translateY(110%);font-style:normal}
+.hero-c h1 .l:nth-child(2){padding-left:1.2em} /* 2行目をずらす＝非均等 */
+.hero-c .sub{margin-top:26px;font-size:.9rem;line-height:2.1;max-width:420px;opacity:0;font-weight:300}
+.hero-num{position:absolute;z-index:3;right:5%;bottom:8%;font-family:"Cormorant Garamond",serif;font-style:italic;font-size:clamp(3rem,8vw,6rem);color:rgba(255,255,255,.09);line-height:1;opacity:0}
+@media(max-width:760px){.hero-num{display:none}}
+.scue{position:absolute;z-index:6;right:clamp(20px,5vw,60px);bottom:30px;color:var(--white);font-family:"Cormorant Garamond",serif;letter-spacing:.3em;font-size:.6rem;display:flex;align-items:center;gap:12px;writing-mode:vertical-rl;opacity:.85}
+.scue .l{width:1px;height:50px;background:rgba(255,255,255,.45);overflow:hidden;position:relative}
+.scue .l::after{content:"";position:absolute;top:-50%;left:0;width:100%;height:50%;background:#fff;animation:cue 2.2s infinite}
+@keyframes cue{0%{top:-50%}100%{top:100%}}
+@media(max-width:760px){.hero-strip{display:none}.hero-c h1 .l:nth-child(2){padding-left:0}}
+
+/* ===== marquee（区切り） ===== */
+.mq{background:var(--ink);color:var(--paper);padding:16px 0;overflow:hidden;white-space:nowrap;border-top:1px solid rgba(255,255,255,.08)}
+.mq .t{display:inline-flex;gap:50px;font-family:"Cormorant Garamond",serif;font-style:italic;font-size:1.3rem;letter-spacing:.12em}
+.mq .t .d{color:var(--accent);font-style:normal}
+
+/* layout helpers */
+.label-en{font-family:"Cormorant Garamond",serif;letter-spacing:.42em;font-size:.78rem;color:var(--accent);text-transform:uppercase}
+.h-jp{font-size:clamp(1.7rem,3.8vw,2.9rem);font-weight:500;line-height:1.5;margin-top:16px;letter-spacing:.05em}
+.reveal{opacity:0;transform:translateY(40px)}
+.mask{clip-path:inset(0 0 100% 0)}
+section{position:relative}
+
+/* ===== CONCEPT（重なり：テキストカードが写真に食い込む） ===== */
+#concept{padding:clamp(120px,18vh,200px) 0;position:relative}
+.concept-wrap{position:relative;max-width:1280px;margin:0 auto;padding:0 clamp(20px,4vw,52px)}
+.concept-photo{position:relative;width:64%;margin-left:auto;aspect-ratio:16/11;overflow:hidden}
+.concept-card{position:absolute;z-index:5;left:clamp(20px,4vw,52px);top:50%;transform:translateY(-46%);width:min(46%,440px);background:var(--paper);padding:clamp(32px,4vw,54px);box-shadow:0 30px 80px -30px rgba(31,36,38,.35)}
+.concept-card .big{font-size:clamp(1.3rem,2.6vw,1.9rem);font-weight:500;line-height:1.85;margin-top:24px;letter-spacing:.05em}
+.concept-card p{margin-top:24px;color:var(--sub);line-height:2.2;font-size:.9rem;font-weight:300}
+.concept-card .sign{margin-top:28px;font-size:.78rem;color:var(--sub);letter-spacing:.15em}
+.concept-bignum{position:absolute;z-index:1;right:clamp(20px,4vw,52px);top:-58px;font-family:"Cormorant Garamond",serif;font-style:italic;font-size:clamp(2.4rem,5vw,4rem);color:rgba(154,123,79,.35);line-height:1;letter-spacing:.1em}
+@media(max-width:860px){
+  .concept-photo{width:100%;aspect-ratio:4/3}
+  .concept-card{position:relative;left:0;top:0;transform:none;width:88%;margin-top:-60px;margin-left:0}
+}
+
+/* ===== FEATURES（千鳥配置・カードごとに高さ/形/角度を変える） ===== */
+#features{padding:clamp(110px,16vh,180px) 0;background:var(--ink);color:var(--white);overflow:hidden}
+#features .label-en{color:var(--accent)}
+#features .h-jp{color:var(--white)}
+.feat-head{max-width:1280px;margin:0 auto;padding:0 clamp(20px,4vw,52px)}
+.feat-stage{max-width:1280px;margin:70px auto 0;padding:0 clamp(20px,4vw,52px);display:grid;grid-template-columns:repeat(12,1fr);gap:clamp(14px,1.6vw,26px)}
+.fcard{position:relative;overflow:hidden;cursor:pointer;text-decoration:none;color:var(--white);opacity:0;transform:translateY(40px)}
+.fcard .img{position:relative;height:100%}
+.fcard .img .ov{position:absolute;inset:0;z-index:4;background:linear-gradient(180deg,transparent 35%,rgba(15,18,20,.88));transition:.5s}
+.fcard:hover .img .ov{background:linear-gradient(180deg,transparent 15%,rgba(15,18,20,.94))}
+.fcard .cap{position:absolute;z-index:5;left:22px;right:22px;bottom:24px}
+.fcard .no{font-family:"Cormorant Garamond",serif;font-style:italic;letter-spacing:.1em;font-size:.95rem;color:var(--accent)}
+.fcard h3{font-size:1.1rem;font-weight:500;line-height:1.6;margin-top:8px;letter-spacing:.04em}
+.fcard .arrow{margin-top:14px;font-size:.7rem;letter-spacing:.2em;opacity:0;transform:translateX(-8px);transition:.45s}
+.fcard:hover .arrow{opacity:1;transform:translateX(0)}
+/* 千鳥（非均等）レイアウト：span と translateY を個別指定 */
+.fcard:nth-child(1){grid-column:span 5;height:520px}
+.fcard:nth-child(2){grid-column:span 4;height:400px;transform:translateY(80px)}
+.fcard:nth-child(3){grid-column:span 3;height:460px;transform:translateY(20px)}
+.fcard:nth-child(4){grid-column:span 4;height:440px}
+.fcard:nth-child(5){grid-column:span 3;height:520px;transform:translateY(70px)}
+.fcard:nth-child(6){grid-column:span 5;height:380px;transform:translateY(10px)}
+@media(max-width:880px){
+  .feat-stage{grid-template-columns:1fr 1fr}
+  .fcard{grid-column:auto!important;height:340px!important;transform:none!important}
+}
+@media(max-width:520px){.feat-stage{grid-template-columns:1fr}}
+
+/* ===== PAGE-FLIP セクション（スクロールで紙がめくれる） ===== */
+.flip-sec{position:relative;height:300vh;background:var(--paper2)}
+.flip-sticky{position:sticky;top:0;height:100vh;overflow:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:clamp(20px,4vh,48px);perspective:1800px}
+.flip-stack{position:relative;width:min(72vw,640px);aspect-ratio:3/2}
+.flip-page{position:absolute;inset:0;transform-origin:left center;transform-style:preserve-3d;backface-visibility:hidden;box-shadow:0 40px 100px -40px rgba(31,36,38,.5)}
+.flip-page .face{position:absolute;inset:0;overflow:hidden}
+.flip-page .meta{position:absolute;z-index:6;left:36px;bottom:34px;color:var(--white)}
+.flip-page .meta .n{font-family:"Cormorant Garamond",serif;font-style:italic;font-size:1rem;color:var(--accent)}
+.flip-page .meta h3{font-size:clamp(1.2rem,2.5vw,1.8rem);font-weight:500;margin-top:8px;line-height:1.5}
+.flip-page .meta .ov{position:absolute;inset:0;z-index:-1}
+.flip-cap{text-align:center;max-width:520px;padding:0 20px}
+.flip-cap .label-en{color:var(--accent)}
+.flip-cap p{margin-top:14px;color:var(--sub);font-size:.86rem;line-height:2;font-weight:300}
+
+/* ===== COUNSELING（左に大きく余白、写真を右に振り切る・blob） ===== */
+#counseling{padding:clamp(120px,18vh,200px) 0;overflow:hidden}
+.coun-wrap{max-width:1280px;margin:0 auto;padding:0 clamp(20px,4vw,52px);position:relative;display:grid;grid-template-columns:1fr 1fr;gap:clamp(30px,5vw,80px);align-items:center}
+.coun-photos{position:relative;height:520px}
+.coun-photos .a{position:absolute;top:0;left:8%;width:70%;height:74%;overflow:hidden;z-index:2}
+.coun-photos .b{position:absolute;bottom:0;right:0;width:52%;height:56%;overflow:hidden;z-index:3;box-shadow:0 30px 70px -30px rgba(31,36,38,.4)}
+.coun-photos .ring{position:absolute;z-index:1;top:-30px;right:8%;width:160px;height:160px;border:1px solid var(--accent);border-radius:50%;opacity:.5}
+.coun-txt .big{font-size:clamp(1.4rem,3vw,2.1rem);font-weight:500;line-height:1.7;margin-top:24px}
+.coun-txt p{margin-top:26px;color:var(--sub);line-height:2.2;font-size:.92rem;font-weight:300}
+.spec{margin-top:36px;border-top:1px solid var(--line)}
+.spec dl{display:grid;grid-template-columns:110px 1fr;padding:15px 0;border-bottom:1px solid var(--line);gap:14px}
+.spec dt{font-family:"Cormorant Garamond",serif;letter-spacing:.12em;font-size:.82rem;color:var(--ink)}
+.spec dd{color:var(--sub);font-size:.9rem}
+.spec .price{font-family:"Cormorant Garamond",serif;font-size:1.05rem;color:var(--ink)}
+@media(max-width:860px){.coun-wrap{grid-template-columns:1fr;gap:50px}.coun-photos{height:380px}}
+
+/* ===== INFO / HOURS（非対称2:3） ===== */
+#info{padding:clamp(100px,15vh,160px) 0;background:var(--ink);color:var(--white)}
+#info .label-en{color:var(--accent)}#info .h-jp{color:var(--white)}
+.info-wrap{max-width:1280px;margin:54px auto 0;padding:0 clamp(20px,4vw,52px);display:grid;grid-template-columns:1.3fr .7fr;gap:clamp(30px,5vw,70px)}
+.hours table{width:100%;border-collapse:collapse;font-size:.9rem}
+.hours th,.hours td{padding:14px 6px;border-bottom:1px solid rgba(255,255,255,.14);text-align:center}
+.hours th{font-family:"Cormorant Garamond",serif;letter-spacing:.1em;font-weight:400;color:rgba(255,255,255,.6);font-size:.8rem}
+.hours td:first-child{text-align:left;color:var(--white)}
+.hours .x{color:rgba(255,255,255,.4)}
+.news .item{padding:18px 0;border-bottom:1px solid rgba(255,255,255,.14)}
+.news .item .d{font-family:"Cormorant Garamond",serif;font-style:italic;letter-spacing:.1em;font-size:.78rem;color:var(--accent)}
+.news .item p{margin-top:7px;font-size:.86rem;line-height:1.8;color:rgba(255,255,255,.82)}
+@media(max-width:760px){.info-wrap{grid-template-columns:1fr;gap:44px}}
+
+/* ===== ACCESS（地図を斜めクリップ＋情報を重ねる） ===== */
+#access{padding:clamp(110px,16vh,180px) 0;overflow:hidden}
+.acc-wrap{max-width:1280px;margin:54px auto 0;padding:0 clamp(20px,4vw,52px);position:relative}
+.acc-map{width:78%;aspect-ratio:16/9;overflow:hidden;margin-left:auto}
+.acc-card{position:absolute;z-index:5;left:clamp(20px,4vw,52px);bottom:-30px;width:min(42%,400px);background:var(--paper);padding:clamp(28px,3vw,44px);box-shadow:0 30px 80px -30px rgba(31,36,38,.35)}
+.acc-card dl{display:grid;grid-template-columns:96px 1fr;padding:14px 0;border-bottom:1px solid var(--line);gap:12px}
+.acc-card dt{font-family:"Cormorant Garamond",serif;letter-spacing:.12em;font-size:.8rem;color:var(--accent)}
+.acc-card dd{color:var(--sub);font-size:.9rem;line-height:1.8}
+@media(max-width:860px){.acc-map{width:100%}.acc-card{position:relative;left:0;bottom:0;width:90%;margin-top:-50px}}
+
+/* ===== CTA ===== */
+#cta{position:relative;padding:clamp(110px,16vh,190px) 0 clamp(140px,18vh,220px);text-align:center;background:var(--ink3);color:var(--white);overflow:hidden}
+#cta .ghost{position:absolute;bottom:-4%;left:0;right:0;text-align:center;font-family:"Cormorant Garamond",serif;font-style:italic;font-size:clamp(4rem,16vw,13rem);color:rgba(255,255,255,.05);white-space:nowrap;z-index:1;pointer-events:none}
+#cta .inner{position:relative;z-index:2}
+#cta h2{font-size:clamp(1.5rem,3.5vw,2.6rem);font-weight:500;line-height:1.6}
+#cta .tel{font-family:"Cormorant Garamond",serif;font-size:clamp(2.4rem,7vw,4.5rem);letter-spacing:.08em;margin-top:26px}
+#cta .note{font-size:.8rem;color:rgba(255,255,255,.55);margin-top:6px;letter-spacing:.1em}
+#cta .btn{display:inline-block;margin-top:32px;border:1px solid var(--white);color:var(--white);padding:18px 56px;text-decoration:none;letter-spacing:.22em;font-size:.8rem;transition:.45s}
+#cta .btn:hover{background:var(--white);color:var(--ink)}
+
+footer{background:var(--ink2);color:rgba(251,250,248,.65);padding:60px clamp(20px,4vw,52px) 34px}
+.f-top{display:flex;justify-content:space-between;flex-wrap:wrap;gap:36px;padding-bottom:38px;border-bottom:1px solid rgba(255,255,255,.1)}
+.f-brand .n{font-family:"Cormorant Garamond",serif;font-size:1.4rem;letter-spacing:.22em;color:var(--white)}
+.f-brand p{margin-top:12px;font-size:.78rem;line-height:2;opacity:.7}
+.f-nav{display:flex;gap:44px;flex-wrap:wrap}
+.f-nav a{display:block;color:rgba(251,250,248,.65);text-decoration:none;font-size:.78rem;letter-spacing:.1em;line-height:2.3}
+.f-nav a:hover{color:var(--white)}
+.f-bottom{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-top:26px;font-size:.68rem;letter-spacing:.1em;opacity:.55}
+</style>
+</head>
+<body>
+
+<div class="cur"></div>
+<div class="curtain"></div>
+<div id="load"><div class="en" id="loadName"></div><div class="ln" id="loadLn"></div></div>
+
+<header class="hero-mode" id="hd">
+  <div class="brand"><div class="n">SAMPLE ORTHO</div><div class="t">ORTHODONTIC OFFICE</div></div>
+  <nav>
+    <a href="#concept">Concept</a>
+    <a href="#features">Feature</a>
+    <a href="#flip">Process</a>
+    <a href="#counseling">Counseling</a>
+    <a href="#access">Access</a>
+    <a href="#cta" class="tel en">0120-000-000</a>
+  </nav>
+  <div class="burger"><span></span><span></span><span></span></div>
+</header>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="bg sample"><div class="fill">HERO MOVIE / IMAGE</div></div>
+  <div class="veil"></div>
+  <div class="hero-strip sample clip-br"><div class="fill">SUB</div></div>
+  <div class="hero-num en">01</div>
+  <div class="hero-c">
+    <div class="label">Escort ship</div>
+    <h1>
+      <span class="l"><i>悩みに寄り添い、</i></span>
+      <span class="l"><i>技術で導く。</i></span>
+    </h1>
+    <p class="sub">矯正治療は、精神的にも技術的にも多くの不安が募るもの。だからこそ一人ひとりの不安に寄り添い、確かな技術で明るい笑顔へと導いていきます。</p>
+  </div>
+  <div class="scue">SCROLL<div class="l"></div></div>
+</section>
+
+<div class="mq">
+  <div class="t" id="mq">
+    <span class="en">Orthodontics</span><span class="d">✦</span><span class="en">Hybrid Treatment</span><span class="d">✦</span>
+    <span class="en">Total Fee System</span><span class="d">✦</span><span class="en">Escort ship</span><span class="d">✦</span>
+  </div>
+</div>
+
+<!-- CONCEPT：重なりレイアウト -->
+<section id="concept">
+  <div class="concept-wrap">
+    <div class="concept-bignum en">Concept</div>
+    <div class="concept-photo sample reveal mask clip-tl"><div class="fill">CONCEPT IMAGE</div></div>
+    <div class="concept-card reveal">
+      <div class="label-en">Our Philosophy</div>
+      <div class="big">不安に寄り添い、<br>確かな技術で<br>明るい笑顔へ導く。</div>
+      <p>矯正治療は数年にわたる長い道のり。診療方針も院内の空気も、あなたに合っているかを確かめてほしい。私たちは「治して終わり」ではなく、ゴールまで丁寧にエスコートする伴走者でありたいと考えています。</p>
+      <div class="sign">院長 ─ SAMPLE NAME</div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES：千鳥・非均等カード -->
+<section id="features">
+  <div class="feat-head reveal">
+    <div class="label-en">Feature</div>
+    <div class="h-jp">当院の特徴</div>
+  </div>
+  <div class="feat-stage">
+    <a class="fcard clip-br"><div class="img sample"><div class="fill">HYBRID</div><div class="ov"></div></div><div class="cap"><div class="no en">01</div><h3>マウスピース型矯正を併用した<br>ハイブリッド矯正治療</h3><div class="arrow en">View →</div></div></a>
+    <a class="fcard"><div class="img sample s"><div class="fill">CLEAR</div><div class="ov"></div></div><div class="cap"><div class="no en">02</div><h3>不安や疑問を<br>クリアにする初診相談</h3><div class="arrow en">View →</div></div></a>
+    <a class="fcard clip-tl"><div class="img sample s"><div class="fill">EFFICIENT</div><div class="ov"></div></div><div class="cap"><div class="no en">03</div><h3>通院負担を抑えた<br>効率的な治療</h3><div class="arrow en">View →</div></div></a>
+    <a class="fcard"><div class="img sample s"><div class="fill">TEAM</div><div class="ov"></div></div><div class="cap"><div class="no en">04</div><h3>プロフェッショナル<br>チームによる診療</h3><div class="arrow en">View →</div></div></a>
+    <a class="fcard clip-diag"><div class="img sample s"><div class="fill">CLEAN</div><div class="ov"></div></div><div class="cap"><div class="no en">05</div><h3>明るく清潔に<br>保たれた院内</h3><div class="arrow en">View →</div></div></a>
+    <a class="fcard clip-br"><div class="img sample"><div class="fill">TOTAL FEE</div><div class="ov"></div></div><div class="cap"><div class="no en">06</div><h3>追加料金のない<br>トータルフィーシステム</h3><div class="arrow en">View →</div></div></a>
+  </div>
+</section>
+
+<!-- PAGE FLIP：スクロールで紙がめくれる -->
+<section class="flip-sec" id="flip">
+  <div class="flip-sticky">
+    <div class="flip-cap">
+      <div class="label-en">Process</div>
+      <div class="h-jp" style="font-size:clamp(1.4rem,3vw,2.2rem)">治療の流れ</div>
+      <p>初診相談から治療完了まで。1ページずつめくるように、ステップを丁寧にご説明します。</p>
+    </div>
+    <div class="flip-stack" id="flipStack">
+      <!-- 下から順に重ねる。JSでめくる -->
+      <div class="flip-page" data-i="3"><div class="face sample"><div class="fill">04 / 保定・メンテナンス</div></div><div class="meta"><div class="n">Step 04</div><h3>保定・定期メンテナンス</h3></div></div>
+      <div class="flip-page" data-i="2"><div class="face sample"><div class="fill">03 / 矯正治療</div></div><div class="meta"><div class="n">Step 03</div><h3>矯正装置による治療</h3></div></div>
+      <div class="flip-page" data-i="1"><div class="face sample"><div class="fill">02 / 精密検査・診断</div></div><div class="meta"><div class="n">Step 02</div><h3>精密検査・治療計画</h3></div></div>
+      <div class="flip-page" data-i="0"><div class="face sample"><div class="fill">01 / 初診相談</div></div><div class="meta"><div class="n">Step 01</div><h3>初診相談・カウンセリング</h3></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- COUNSELING：写真2枚重ね＋円 -->
+<section id="counseling">
+  <div class="coun-wrap">
+    <div class="coun-photos reveal">
+      <div class="ring"></div>
+      <div class="a sample clip-tl"><div class="fill">COUNSELING</div></div>
+      <div class="b sample s clip-br"><div class="fill">CHAIR</div></div>
+    </div>
+    <div class="coun-txt reveal">
+      <div class="label-en">Counseling</div>
+      <div class="h-jp">初診相談</div>
+      <div class="big">理想の歯並びになるか、<br>まずは不安をなくすことから。</div>
+      <p>矯正治療は初診相談からはじまります。ご自身の歯並びと治療内容を、時間をかけて詳しくご説明。疑問や不安を解消したうえで、納得して治療をスタートできます。</p>
+      <div class="spec">
+        <dl><dt>FEE</dt><dd class="price">3,300円 <span style="font-size:.8rem;color:var(--sub)">（税込）</span></dd></dl>
+        <dl><dt>TIME</dt><dd>約 60分</dd></dl>
+        <dl><dt>CHECK</dt><dd>口腔内スキャナー・レントゲン あり</dd></dl>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- INFO / HOURS -->
+<section id="info">
+  <div class="feat-head reveal" style="max-width:1280px;margin:0 auto;padding:0 clamp(20px,4vw,52px)">
+    <div class="label-en">Information</div>
+    <div class="h-jp">お知らせ・診療時間</div>
+  </div>
+  <div class="info-wrap">
+    <div class="hours reveal">
+      <table>
+        <tr><th></th><th>月</th><th>火</th><th>水</th><th>木</th><th>金</th><th>土</th><th>日</th></tr>
+        <tr><td>13:00–20:00</td><td>●</td><td>●</td><td class="x">/</td><td class="x">×</td><td class="x">/</td><td class="x">/</td><td class="x">×</td></tr>
+        <tr><td>11:00–19:00</td><td class="x">/</td><td class="x">/</td><td>●</td><td class="x">×</td><td>●</td><td class="x">/</td><td class="x">×</td></tr>
+        <tr><td>10:00–17:30</td><td class="x">/</td><td class="x">/</td><td class="x">/</td><td class="x">×</td><td class="x">/</td><td>●</td><td class="x">×</td></tr>
+      </table>
+      <p style="margin-top:18px;font-size:.82rem;color:rgba(255,255,255,.6);line-height:1.9">休診：木曜・日曜・祝日／※完全予約制です。</p>
+    </div>
+    <div class="news reveal">
+      <div class="item"><div class="d">2025.05.01</div><p>【休診】5月3日〜7日は休診とさせていただきます。</p></div>
+      <div class="item"><div class="d">2025.04.15</div><p>GW中の診療スケジュールについて。</p></div>
+      <div class="item"><div class="d">2025.04.01</div><p>Web予約・お問い合わせを開始しました。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ACCESS：地図を斜めクリップ＋カード重ね -->
+<section id="access">
+  <div class="feat-head reveal" style="max-width:1280px;margin:0 auto;padding:0 clamp(20px,4vw,52px)">
+    <div class="label-en">Access</div>
+    <div class="h-jp">アクセス</div>
+  </div>
+  <div class="acc-wrap">
+    <div class="acc-map sample reveal clip-diag-rev"><div class="fill">MAP</div></div>
+    <div class="acc-card reveal">
+      <dl><dt>ADDRESS</dt><dd>〒000-0000<br>東京都〇〇区〇〇 0-0-00 4F</dd></dl>
+      <dl><dt>ACCESS</dt><dd>〇〇駅 〇番出口 徒歩3分</dd></dl>
+      <dl><dt>TEL</dt><dd class="en">0120-000-000</dd></dl>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section id="cta">
+  <div class="ghost en">Reserve</div>
+  <div class="inner">
+    <h2 class="reveal">まずは初診相談から。<br>お気軽にご連絡ください。</h2>
+    <div class="tel reveal en">0120-000-000</div>
+    <div class="note reveal">受付時間 10:00 – 19:00（木・日・祝を除く）</div>
+    <a href="#" class="btn reveal">Webで予約・お問い合わせ</a>
+  </div>
+</section>
+
+<footer>
+  <div class="f-top">
+    <div class="f-brand">
+      <div class="n">SAMPLE ORTHO</div>
+      <p>悩みに寄り添い、技術で導く。<br>SAMPLE ORTHODONTIC OFFICE</p>
+    </div>
+    <div class="f-nav">
+      <div><a href="#concept">Concept</a><a href="#features">Feature</a><a href="#flip">Process</a></div>
+      <div><a href="#counseling">Counseling</a><a href="#access">Access</a><a href="#cta">Reservation</a></div>
+    </div>
+  </div>
+  <div class="f-bottom">
+    <span>© SAMPLE ORTHODONTIC OFFICE</span>
+    <span>※ 院名・住所・写真はすべてサンプルです</span>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script>
+gsap.registerPlugin(ScrollTrigger);
+
+/* cursor */
+(function(){
+  const c=document.querySelector('.cur');let x=0,y=0,cx=0,cy=0;
+  addEventListener('mousemove',e=>{x=e.clientX;y=e.clientY});
+  (function f(){cx+=(x-cx)*.2;cy+=(y-cy)*.2;c.style.left=cx+'px';c.style.top=cy+'px';requestAnimationFrame(f)})();
+  document.querySelectorAll('a,.fcard,.burger,.btn').forEach(el=>{
+    el.addEventListener('mouseenter',()=>{c.style.width='56px';c.style.height='56px';c.style.background='rgba(255,255,255,.1)'});
+    el.addEventListener('mouseleave',()=>{c.style.width='34px';c.style.height='34px';c.style.background='transparent'});
+  });
+})();
+
+/* loader */
+(function(){
+  const ln=document.getElementById('loadName');
+  "SAMPLE".split('').forEach(ch=>{const s=document.createElement('span');s.textContent=ch;ln.appendChild(s)});
+  const tl=gsap.timeline();
+  tl.to(ln.querySelectorAll('span'),{y:0,duration:.7,stagger:.05,ease:'power3.out',delay:.2})
+    .to('#loadLn',{width:280,duration:.7,ease:'power2.inOut'},'-=.3')
+    .to(ln.querySelectorAll('span'),{y:'-110%',duration:.55,stagger:.04,ease:'power3.in'})
+    .to('#load',{yPercent:-100,duration:.8,ease:'power4.inOut'},'-=.2')
+    .set('#load',{display:'none'})
+    .add(heroIn,'-=.4');
+})();
+
+function heroIn(){
+  gsap.to('.hero-c h1 .l i',{y:0,duration:1,stagger:.13,ease:'power4.out'});
+  gsap.to('.hero-c .label',{opacity:.85,duration:.9,delay:.2});
+  gsap.to('.hero-c .sub',{opacity:1,duration:1,delay:.6});
+  gsap.to('.hero-strip',{opacity:1,y:0,duration:1.2,delay:.4,ease:'power3.out'});
+  gsap.to('.hero-num',{opacity:1,duration:1.2,delay:.6});
+}
+
+/* header */
+const hd=document.getElementById('hd');
+ScrollTrigger.create({trigger:'#hero',start:'bottom 80px',
+  onEnter:()=>{hd.classList.add('scrolled');hd.classList.remove('hero-mode')},
+  onLeaveBack:()=>{hd.classList.remove('scrolled');hd.classList.add('hero-mode')}});
+
+/* reveals & masks */
+gsap.utils.toArray('.reveal').forEach(el=>{
+  gsap.to(el,{opacity:1,y:0,duration:1,ease:'power3.out',scrollTrigger:{trigger:el,start:'top 86%'}});
+});
+gsap.utils.toArray('.mask').forEach(el=>{
+  gsap.to(el,{clipPath:'inset(0 0 0% 0)',duration:1.3,ease:'power4.out',scrollTrigger:{trigger:el,start:'top 82%'}});
+});
+
+/* parallax */
+gsap.to('#hero .bg',{yPercent:16,ease:'none',scrollTrigger:{trigger:'#hero',start:'top top',end:'bottom top',scrub:true}});
+gsap.to('.hero-strip',{yPercent:-22,ease:'none',scrollTrigger:{trigger:'#hero',start:'top top',end:'bottom top',scrub:true}});
+gsap.to('.concept-photo .fill',{yPercent:-10,ease:'none',scrollTrigger:{trigger:'#concept',start:'top bottom',end:'bottom top',scrub:true}});
+gsap.to('.concept-card',{y:-40,ease:'none',scrollTrigger:{trigger:'#concept',start:'top bottom',end:'bottom top',scrub:true}});
+gsap.to('.coun-photos .b',{y:-30,ease:'none',scrollTrigger:{trigger:'#counseling',start:'top bottom',end:'bottom top',scrub:true}});
+gsap.to('#cta .ghost',{y:-30,ease:'none',scrollTrigger:{trigger:'#cta',start:'top bottom',end:'bottom top',scrub:true}});
+
+/* feature stagger：CSSの千鳥translateYを保持したまま、opacityと微小な上げだけ動かす */
+gsap.utils.toArray('.fcard').forEach((card)=>{
+  gsap.set(card,{opacity:0});
+  ScrollTrigger.create({trigger:card,start:'top 92%',once:true,
+    onEnter:()=>gsap.to(card,{opacity:1,duration:1,ease:'power2.out'})});
+});
+
+/* marquee */
+(function(){const t=document.getElementById('mq');t.innerHTML+=t.innerHTML;gsap.to(t,{xPercent:-50,duration:18,ease:'none',repeat:-1});})();
+
+/* ===== PAGE FLIP ===== */
+(function(){
+  const pages=gsap.utils.toArray('.flip-page'); // [3,2,1,0]
+  const total=pages.length;
+  // 表示順：data-i 0が一番上。上から順にめくる
+  const ordered=pages.slice().sort((a,b)=>a.dataset.i-b.dataset.i); // [0,1,2,3]
+  ScrollTrigger.create({
+    trigger:'.flip-sec',start:'top top',end:'bottom bottom',scrub:.6,
+    onUpdate:self=>{
+      const p=self.progress*(total-1); // 0..3
+      ordered.forEach((page,i)=>{
+        let rot=0,sh=1;
+        if(i<p-0 && i<total-1){
+          // めくり進行
+          const local=Math.min(Math.max(p-i,0),1);
+          rot=-local*170; // -170度まで開く
+          sh=1-local*0.15;
+          page.style.zIndex=10+i; // めくった紙は上へ重なる感
+        } else {
+          page.style.zIndex= total-i;
+        }
+        page.style.transform=`rotateY(${rot}deg) scale(${sh})`;
+        page.style.filter=`brightness(${1-Math.min(Math.max(p-i,0),1)*0.25})`;
+      });
+    }
+  });
+})();
+
+/* smooth anchor */
+document.querySelectorAll('a[href^="#"]').forEach(a=>{
+  a.addEventListener('click',e=>{const id=a.getAttribute('href');if(id==='#')return;
+    const t=document.querySelector(id);if(t){e.preventDefault();scrollTo({top:t.offsetTop,behavior:'smooth'})}});
+});
+</script>
+</body>
+</html>
